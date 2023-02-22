@@ -34,8 +34,6 @@ namespace MovieCollection.Controllers
         [HttpPost]
         public IActionResult AddAMovie(MovieEntry ar)
         {
-            _Context.Add(ar);
-            _Context.SaveChanges();
             return View("Confirmation", ar);
         }
         
