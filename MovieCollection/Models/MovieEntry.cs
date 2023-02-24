@@ -8,8 +8,6 @@ namespace MovieCollection.Models
         [Required]
         public int MovieId { get; set; }
         [Required]
-        public string Category { get; set; }
-        [Required]
         public string Title { get; set; }
         [Required]
         public int Year { get; set; }
@@ -21,5 +19,10 @@ namespace MovieCollection.Models
         public string LentTo { get; set; }
         [MaxLength(25, ErrorMessage = "Notes limited to 25 characters.")]
         public string Notes { get; set; }
+
+        //Build foreign key
+        [Required]
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }

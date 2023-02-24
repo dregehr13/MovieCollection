@@ -1,18 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using MovieCollection.Models;
-using System.Diagnostics;
+using System.Linq;
 
 namespace MovieCollection.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private MovieContext _Context { get; set; }
 
-        public HomeController(ILogger<HomeController> logger, MovieContext contextName)
+        public HomeController(MovieContext contextName)
         {
-            _logger = logger;
             _Context = contextName;
         }
         public IActionResult Index()
@@ -22,13 +20,14 @@ namespace MovieCollection.Controllers
 
         public IActionResult MyPodcasts()
         {
-            return View("My Podcasts");
+            return View();
         }
 
         [HttpGet]
         public IActionResult AddAMovie()
         {
-            return View("AddAMovie");
+            ViewBag.Categories = _Context.Categories.ToList();
+            return View();
         }
 
         [HttpPost]
@@ -36,11 +35,11 @@ namespace MovieCollection.Controllers
         {
             return View("Confirmation", ar);
         }
-        
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+
+        public IActionResult Collection()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var movies = _Context.Responses.Include(x => x.Category);
+            return View(movies);
         }
     }
 }
